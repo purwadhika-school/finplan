@@ -1,7 +1,28 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { connect } from "react-redux";
+import { doSignup } from "../actions";
 
 class Register extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: "",
+      password: "",
+      confirm_password: ""
+    };
+  }
+
+  handleSignup() {
+    // 1. handle jika salah satu field kosong
+    // 2. handle password dan confirm password hrs sama
+    const { email, password, confirm_password } = this.state;
+    if (email === "" || password === "" || confirm_password === "") {
+      Alert.alert("Warning!", "Fields can not be empty!");
+    }
+  }
+
   render() {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -15,6 +36,7 @@ class Register extends Component {
           }}
         >
           <TextInput
+            onChangeText={txt => this.setState({ email: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, width: "70%", marginLeft: 10 }}
             placeholder="Email"
@@ -30,6 +52,7 @@ class Register extends Component {
           }}
         >
           <TextInput
+            onChangeText={txt => this.setState({ password: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, marginLeft: 10 }}
             placeholder="Password"
@@ -45,6 +68,7 @@ class Register extends Component {
           }}
         >
           <TextInput
+            onChangeText={txt => this.setState({ confirm_password: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, marginLeft: 10 }}
             placeholder="Password Confirmation"
@@ -74,6 +98,7 @@ class Register extends Component {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => this.handleSignup()}
             style={{
               width: "30%",
               borderColor: "#F1F1F1",
@@ -93,4 +118,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default connect()(Register);
