@@ -20,10 +20,20 @@ class Register extends Component {
     const { email, password, confirm_password } = this.state;
     if (email === "" || password === "" || confirm_password === "") {
       Alert.alert("Warning!", "Fields can not be empty!");
+    } else {
+      if (password !== confirm_password) {
+        Alert.alert(
+          "Warning!",
+          "Fields password and confirmation password should be the same!"
+        );
+      } else {
+        this.props.dispatch(doSignup(email, password));
+      }
     }
   }
 
   render() {
+    // 1. Password dan confirm password harus di masking
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View
@@ -52,6 +62,7 @@ class Register extends Component {
           }}
         >
           <TextInput
+            secureTextEntry={true}
             onChangeText={txt => this.setState({ password: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, marginLeft: 10 }}
@@ -68,6 +79,7 @@ class Register extends Component {
           }}
         >
           <TextInput
+            secureTextEntry={true}
             onChangeText={txt => this.setState({ confirm_password: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, marginLeft: 10 }}
