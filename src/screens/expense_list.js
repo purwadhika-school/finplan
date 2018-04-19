@@ -75,10 +75,26 @@ class ExpenseList extends Component {
       <View style={{ backgroundColor: "#F1F1F1", flex: 1 }}>
         <View style={{ marginTop: 15 }}>
           <FlatList
+            data={this.state.income_data}
+            keyExtractor={(data, index) => index}
+            renderItem={this.renderBody}
+          />
+          <TouchableOpacity
+            style={{
+              alignSelf: "center",
+              width: "40%",
+              borderColor: "#F1F1F1",
+              borderRadius: 3,
+              backgroundColor: "#77dd77",
+              borderWidth: 1,
+              marginRight: 5,
+              marginTop: 10
+            }}
           >
             <Text style={{ textAlign: "center", fontSize: 20, margin: 10 }}>
               Add Expense
             </Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
