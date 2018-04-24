@@ -32,12 +32,14 @@ class Register extends Component {
     }
   }
 
-  render() {
-    if (this.props.signupData.status === 'Signup Success'){
+  componentWillReceiveProps(nextProps){
+    if (this.props.signupData.status !== nextProps.signupData.status){
       Alert.alert('Congratulations!', 'Signup success! Now please login.')
       this.props.navigation.goBack()
     }
+  }
 
+  render() {
     // 1. Password dan confirm password harus di masking
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
