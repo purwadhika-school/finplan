@@ -10,6 +10,8 @@ import { Provider } from "react-redux";
 import store from "./src/store/Store";
 import Setup from "./src/Setup";
 
+console.disableYellowBox = true
+
 class App extends Component {
   render() {
     return (

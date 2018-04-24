@@ -1,11 +1,48 @@
 import React, { Component } from "react";
-import { View, Image, Text, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator
+} from "react-native";
+import { connect } from "react-redux";
+import { doSignin } from "../actions";
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: "",
+      password: ""
+    };
+  }
+  // 1. handle field kosong
+
+  loginHandler() {
+    const { email, password } = this.state;
+    if (email === "" || password === "") {
+      Alert.alert("Warning!", "Fields can not be empty!");
+    } else {
+      this.props.dispatch(doSignin(email, password));
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.signinData.status !== nextProps.signinData.status) {
+      this.props.navigation.navigate("HomePage");
+    }
+  }
+
   render() {
-    console.log(this.props)
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        {this.props.signinData.isProcessing && (
+          <ActivityIndicator size="large" animating={true} />
+        )}
         <View
           style={{
             margin: 10,
@@ -16,6 +53,7 @@ class Login extends Component {
           }}
         >
           <TextInput
+            onChangeText={txt => this.setState({ email: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, width: "70%", marginLeft: 10 }}
             placeholder="Email"
@@ -31,6 +69,7 @@ class Login extends Component {
           }}
         >
           <TextInput
+            onChangeText={txt => this.setState({ password: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, marginLeft: 10 }}
             placeholder="Password"
@@ -45,6 +84,7 @@ class Login extends Component {
           }}
         >
           <TouchableOpacity
+            onPress={() => this.loginHandler()}
             style={{
               width: "30%",
               borderColor: "#F1F1F1",
@@ -79,4 +119,11 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => {
+  console.log(state);
+  return {
+    signinData: state.signinData
+  };
+};
+
+export default connect(mapStateToProps)(Login);

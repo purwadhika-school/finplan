@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { PENDING, FULFILLED, REJECTED } from "redux-promise-middleware";
-import { SIGNUP } from "../actions/index";
+import { SIGNUP, LOGIN } from "../actions/index";
 
 export const signupData = (
   state = {
@@ -38,9 +38,41 @@ export const signupData = (
   }
 };
 
+export const signinData = (state ={
+  isProcessing: false,
+  data: {},
+  status: ''
+}, action) => {
+  switch (action.type){
+    case `${LOGIN}_PENDING`:
+      return {
+        ...state,
+        isProcessing: true,
+      }
+
+    case `${LOGIN}_FULFILLED`:
+      return {
+        ...state,
+        isProcessing: false,
+        data: action.payload.data,
+        status: action.payload.status === 200 ? "Signin Success" : "Something happen!"
+      }
+
+    case `${LOGIN}_REJECTED`:
+      return {
+        ...state,
+        isProcessing: false
+      }
+
+    default: 
+      return state
+  }
+}
+
 
 const rootReducer = combineReducers({
-  signupData
+  signupData,
+  signinData
 });
 
 export default rootReducer;
