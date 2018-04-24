@@ -1,12 +1,5 @@
 import axios from "axios";
 
-export const FETCH_DATA = "FETCH_DATA";
-export const fetchData = () => {
-  return {
-    type: FETCH_DATA
-  };
-};
-
 export const SIGNUP = "SIGNUP";
 export const doSignup = (email, password) => {
   return {
@@ -21,7 +14,6 @@ const registration = (email, password) => {
   return axios
     .post(url, data)
     .then(res => {
-      console.log(res);
       return res;
     })
     .catch(err => {
