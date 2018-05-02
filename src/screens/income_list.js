@@ -80,6 +80,7 @@ class IncomeList extends Component {
             renderItem={this.renderBody}
           />
           <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('IncomeAddPage')}
             style={{
               alignSelf: "center",
               width: "40%",

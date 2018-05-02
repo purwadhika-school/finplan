@@ -8,7 +8,13 @@ class IncomeAdd extends Component {
 
     this.state = {
       selectedBtn: "",
-      amountFormatted: "0"
+      amountFormatted: "0",
+
+      type: '',
+      label: '',
+      amount: '',
+      paydate: '',
+      from: '',
     };
   }
 
