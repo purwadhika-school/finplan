@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getToken, saveToken, removeToken } from "../global/util";
 
 export const SIGNUP = "SIGNUP";
 export const doSignup = (email, password) => {
@@ -22,27 +23,43 @@ const registration = (email, password) => {
 };
 
 
-export const LOGIN = 'LOGIN'
+export const LOGIN = "LOGIN";
 export const doSignin = (email, password) => {
   return {
     type: LOGIN,
     payload: login(email, password)
-  }
-}
+  };
+};
 
 const login = (dataEmail, dataPassword) => {
-  const url = 'http://172.104.50.9:3000/api/Users/login'
+  const url = "http://172.104.50.9:3000/api/Users/login";
   const data = {
     email: dataEmail,
     password: dataPassword
-  }
-  return axios.post(url, data)
+  };
+  return axios
+    .post(url, data)
     .then(response => {
-      console.log(response)
-      return response
+      if (response.status === 200) {
+        saveToken(response.data.id);
+      }
+      return response;
     })
     .catch(error => {
-      console.log(error)
-    })
+      console.log(error);
+    });
+};
 
+
+export const LOGOUT = 'LOGOUT'
+export const doLogout = () => {
+  return {
+    type: LOGOUT,
+    payload: logout()
+  } 
+}
+
+const logout = async () => {
+  await removeToken('token:user')
+  
 }

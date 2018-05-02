@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
+import { connect } from "react-redux";
+import { doLogout } from "../actions";
 
 class Home extends Component {
   render() {
@@ -46,7 +48,7 @@ class Home extends Component {
           }}
         >
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('IncomeListPage')}
+            onPress={() => this.props.navigation.navigate("IncomeListPage")}
             style={{
               width: "40%",
               borderColor: "#F1F1F1",
@@ -61,7 +63,7 @@ class Home extends Component {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('ExpenseListPage')}
+            onPress={() => this.props.navigation.navigate("ExpenseListPage")}
             style={{
               width: "40%",
               borderColor: "#F1F1F1",
@@ -75,10 +77,28 @@ class Home extends Component {
               Add Expense
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.dispatch(doLogout())
+              this.props.navigation.goBack()
+            }}
+            style={{
+              width: "40%",
+              borderColor: "#F1F1F1",
+              borderRadius: 3,
+              backgroundColor: "#77dd77",
+              borderWidth: 1,
+              marginLeft: 5
+            }}
+          >
+            <Text style={{ textAlign: "center", fontSize: 20, margin: 10 }}>
+              Logout
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
 
-export default Home;
+export default connect()(Home);

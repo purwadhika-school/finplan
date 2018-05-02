@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { doSignin } from "../actions";
+import { getToken } from '../global/util'
 
 class Login extends Component {
   constructor(props) {
@@ -20,6 +21,18 @@ class Login extends Component {
       password: ""
     };
   }
+
+  componentDidMount(){
+    this.checkToken()
+  }
+
+  checkToken = async () => {
+    const token = await getToken('token:user')
+    if (token && token !== ''){
+      this.props.navigation.navigate('HomePage')
+    }
+  }
+
   // 1. handle field kosong
 
   loginHandler() {
