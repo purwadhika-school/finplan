@@ -19,7 +19,6 @@ import ExpenseAdd from "./screens/expense_add";
 
 class Setup extends Component {
   render() {
-    console.log(this.props);
     return <Login navigation={this.props.navigation} />;
   }
 }

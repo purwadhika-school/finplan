@@ -69,6 +69,7 @@ class Login extends Component {
           }}
         >
           <TextInput
+            secureTextEntry={true}
             onChangeText={txt => this.setState({ password: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, marginLeft: 10 }}

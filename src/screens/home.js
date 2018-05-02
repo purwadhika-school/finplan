@@ -46,6 +46,7 @@ class Home extends Component {
           }}
         >
           <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('IncomeListPage')}
             style={{
               width: "40%",
               borderColor: "#F1F1F1",
@@ -60,6 +61,7 @@ class Home extends Component {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('ExpenseListPage')}
             style={{
               width: "40%",
               borderColor: "#F1F1F1",
