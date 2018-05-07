@@ -73,7 +73,7 @@ export const signinData = (
   }
 };
 
-export const incomeData = (
+export const incomeAddData = (
   state = {
     isFetching: false,
     data: {},
@@ -81,7 +81,7 @@ export const incomeData = (
   },
   action
 ) => {
-  switch (action.payload) {
+  switch (action.type) {
     case `${ADD_INCOME}_PENDING`:
       return {
         ...state,
@@ -93,7 +93,7 @@ export const incomeData = (
       return {
         ...state,
         isFetching: false,
-        data: action.payload.data,
+        data: action.payload,
         status: "ok"
       };
 
@@ -112,7 +112,7 @@ export const incomeData = (
 const rootReducer = combineReducers({
   signupData,
   signinData,
-  incomeData
+  incomeAddData
 });
 
 export default rootReducer;

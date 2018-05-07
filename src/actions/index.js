@@ -90,7 +90,6 @@ const doAddIncome = async (selectedBtn, label, amount, paydate, from) => {
   return axios
     .post(url, data)
     .then(res => {
-      console.log(res);
       return res.data;
     })
     .catch(err => {

@@ -34,6 +34,14 @@ class IncomeAdd extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
+      if (nextProps.data_income.status === "ok") {
+        this.props.navigation.goBack();
+      }
+    }
+  }
+
   render() {
     const { selectedBtn } = this.state;
     return (
@@ -208,11 +216,10 @@ class IncomeAdd extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  console.log(state)
+const mapStateToProps = state => {
   return {
-    data_income: state.incomeData
-  }
-}
+    data_income: state.incomeAddData
+  };
+};
 
 export default connect(mapStateToProps)(IncomeAdd);
