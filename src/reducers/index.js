@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { PENDING, FULFILLED, REJECTED } from "redux-promise-middleware";
-import { SIGNUP, LOGIN } from "../actions/index";
+import { SIGNUP, LOGIN, ADD_INCOME } from "../actions/index";
 
 export const signupData = (
   state = {
@@ -38,41 +38,81 @@ export const signupData = (
   }
 };
 
-export const signinData = (state ={
-  isProcessing: false,
-  data: {},
-  status: ''
-}, action) => {
-  switch (action.type){
+export const signinData = (
+  state = {
+    isProcessing: false,
+    data: {},
+    status: ""
+  },
+  action
+) => {
+  switch (action.type) {
     case `${LOGIN}_PENDING`:
       return {
         ...state,
-        isProcessing: true,
-      }
+        isProcessing: true
+      };
 
     case `${LOGIN}_FULFILLED`:
       return {
         ...state,
         isProcessing: false,
         data: action.payload.data,
-        status: action.payload.status === 200 ? "Signin Success" : "Something happen!"
-      }
+        status:
+          action.payload.status === 200 ? "Signin Success" : "Something happen!"
+      };
 
     case `${LOGIN}_REJECTED`:
       return {
         ...state,
         isProcessing: false
-      }
+      };
 
-    default: 
-      return state
+    default:
+      return state;
   }
-}
+};
 
+export const incomeData = (
+  state = {
+    isFetching: false,
+    data: {},
+    status: ""
+  },
+  action
+) => {
+  switch (action.payload) {
+    case `${ADD_INCOME}_PENDING`:
+      return {
+        ...state,
+        isFetching: true,
+        status: "processing"
+      };
+
+    case `${ADD_INCOME}_FULFILLED`:
+      return {
+        ...state,
+        isFetching: false,
+        data: action.payload.data,
+        status: "ok"
+      };
+
+    case `${ADD_INCOME}_REJECTED`:
+      return {
+        ...state,
+        isFetching: false,
+        status: "error"
+      };
+
+    default:
+      return state;
+  }
+};
 
 const rootReducer = combineReducers({
   signupData,
-  signinData
+  signinData,
+  incomeData
 });
 
 export default rootReducer;

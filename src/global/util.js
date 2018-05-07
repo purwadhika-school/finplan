@@ -8,9 +8,17 @@ export const saveToken = async token => {
   }
 };
 
-export const getToken = async key => await AsyncStorage.getItem(key);
+export const saveUserID = async userId => {
+  try {
+    await AsyncStorage.setItem("uid:@#$%", userId);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-export const removeToken = async key => {
+export const getUniversalKeys = async key => await AsyncStorage.getItem(key);
+
+export const removeUniversalKeys = async key => {
   try {
     await AsyncStorage.removeItem(key);
   } catch (error) {

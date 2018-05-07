@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import numeral from "numeral";
+import { connect } from "react-redux";
+import { addIncome } from "../actions";
 
 class IncomeAdd extends Component {
   constructor(props) {
@@ -10,12 +12,26 @@ class IncomeAdd extends Component {
       selectedBtn: "",
       amountFormatted: "0",
 
-      type: '',
-      label: '',
-      amount: '',
-      paydate: '',
-      from: '',
+      label: "",
+      amount: "",
+      paydate: "",
+      from: ""
     };
+  }
+
+  saveHandler() {
+    const { selectedBtn, label, amount, paydate, from } = this.state;
+    if (
+      selectedBtn === "" ||
+      label === "" ||
+      amount === "" ||
+      paydate === "" ||
+      from === ""
+    ) {
+      Alert.alert("Warning!", "Field tidak boleh kosong!");
+    } else {
+      this.props.dispatch(addIncome(selectedBtn, label, amount, paydate, from));
+    }
   }
 
   render() {
@@ -84,6 +100,7 @@ class IncomeAdd extends Component {
           }}
         >
           <TextInput
+            onChangeText={txt => this.setState({ label: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, width: "70%", marginLeft: 20 }}
             placeholder="Label"
@@ -99,12 +116,7 @@ class IncomeAdd extends Component {
           }}
         >
           <TextInput
-            onSubmitEditing={event => console.log(event.nativeEvent.text)
-            //   this.setState({
-            //     amountFormatted: numeral(event.nativeEvent.text).format("0,0")
-            //   })
-            }
-            // value={this.state.amountFormatted}
+            onChangeText={txt => this.setState({ amount: txt })}
             keyboardType="numeric"
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, width: "70%", marginLeft: 20 }}
@@ -121,6 +133,7 @@ class IncomeAdd extends Component {
           }}
         >
           <TextInput
+            onChangeText={txt => this.setState({ paydate: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, width: "70%", marginLeft: 20 }}
             placeholder="Paydate"
@@ -136,6 +149,7 @@ class IncomeAdd extends Component {
           }}
         >
           <TextInput
+            onChangeText={txt => this.setState({ from: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, width: "70%", marginLeft: 20 }}
             placeholder="From"
@@ -143,6 +157,7 @@ class IncomeAdd extends Component {
         </View>
         <View style={{ marginLeft: 20, marginTop: 20, flexDirection: "row" }}>
           <TouchableOpacity
+            onPress={() => this.props.navigation.goBack()}
             style={{
               width: "30%",
               borderColor: "#F1F1F1",
@@ -165,6 +180,7 @@ class IncomeAdd extends Component {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => this.saveHandler()}
             style={{
               width: "30%",
               borderColor: "#F1F1F1",
@@ -192,4 +208,11 @@ class IncomeAdd extends Component {
   }
 }
 
-export default IncomeAdd;
+const mapStateToProps = (state) => {
+  console.log(state)
+  return {
+    data_income: state.incomeData
+  }
+}
+
+export default connect(mapStateToProps)(IncomeAdd);

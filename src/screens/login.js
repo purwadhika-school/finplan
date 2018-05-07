@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { doSignin } from "../actions";
-import { getToken } from '../global/util'
+import { getUniversalKeys } from '../global/util'
 
 class Login extends Component {
   constructor(props) {
@@ -27,7 +27,8 @@ class Login extends Component {
   }
 
   checkToken = async () => {
-    const token = await getToken('token:user')
+    const token = await getUniversalKeys('token:user')
+    console.log(token)
     if (token && token !== ''){
       this.props.navigation.navigate('HomePage')
     }
@@ -37,6 +38,7 @@ class Login extends Component {
 
   loginHandler() {
     const { email, password } = this.state;
+    console.log(email, password)
     if (email === "" || password === "") {
       Alert.alert("Warning!", "Fields can not be empty!");
     } else {
