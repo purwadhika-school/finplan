@@ -1,33 +1,26 @@
 import React, { Component } from "react";
-import { View, FlatList, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator
+} from "react-native";
 import numeral from "numeral";
+import { connect } from "react-redux";
+import { getIncomeList } from "../actions";
 
 class IncomeList extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      income_data: [
-        {
-          type: "Regular",
-          label: "Penghasilan utama",
-          amount: "5000000",
-          paydate: "1 January 2018",
-          from: "Tokopedia"
-        },
-        {
-          type: "Others",
-          label: "Penghasilan tambahan",
-          amount: "1000000",
-          paydate: "5 January 2018",
-          from: "Freelance"
-        }
-      ]
-    };
   }
 
-  renderBody(item_saya) {
-    const amount_formatted = numeral(item_saya.item.amount).format("0,0");
+  componentDidMount() {
+    this.props.dispatch(getIncomeList());
+  }
+
+  renderBody(dataProps) {
+    const amount_formatted = numeral(dataProps.item.amount).format("0,0");
     return (
       <View
         style={{
@@ -39,7 +32,7 @@ class IncomeList extends Component {
         }}
       >
         <View style={{ flexDirection: "row", marginLeft: 20, marginTop: 10 }}>
-          <Text style={{ fontSize: 20 }}>{item_saya.item.label}</Text>
+          <Text style={{ fontSize: 20 }}>{dataProps.item.label}</Text>
           <View
             style={{
               marginLeft: 15,
@@ -56,7 +49,7 @@ class IncomeList extends Component {
                 margin: 5
               }}
             >
-              {item_saya.item.type}
+              {dataProps.item.type}
             </Text>
           </View>
         </View>
@@ -64,7 +57,10 @@ class IncomeList extends Component {
           IDR {amount_formatted}
         </Text>
         <Text style={{ fontSize: 15, marginLeft: 20, marginBottom: 20 }}>
-          from <Text style={{ fontWeight: "700" }}>{item_saya.item.from}</Text>
+          from{" "}
+          <Text style={{ fontWeight: "700" }}>
+            {dataProps.item.organization}
+          </Text>
         </Text>
       </View>
     );
@@ -74,13 +70,18 @@ class IncomeList extends Component {
     return (
       <View style={{ backgroundColor: "#F1F1F1", flex: 1 }}>
         <View style={{ marginTop: 15 }}>
-          <FlatList
-            data={this.state.income_data}
-            keyExtractor={(data, index) => index}
-            renderItem={this.renderBody}
-          />
+          {this.props.incomeList.length === 0 && (
+            <ActivityIndicator size="large" />
+          )}
+          {this.props.incomeList.length > 0 && (
+            <FlatList
+              data={this.props.incomeList}
+              keyExtractor={(data, index) => index}
+              renderItem={this.renderBody}
+            />
+          )}
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('IncomeAddPage')}
+            onPress={() => this.props.navigation.navigate("IncomeAddPage")}
             style={{
               alignSelf: "center",
               width: "40%",
@@ -92,7 +93,14 @@ class IncomeList extends Component {
               marginTop: 10
             }}
           >
-            <Text style={{ textAlign: "center", fontSize: 20, margin: 10 }}>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: 20,
+                marginTop: 10,
+                marginBottom: 35
+              }}
+            >
               Add Income
             </Text>
           </TouchableOpacity>
@@ -101,4 +109,11 @@ class IncomeList extends Component {
     );
   }
 }
-export default IncomeList;
+
+const mapStateToProps = state => {
+  return {
+    incomeList: state.incomeData.data
+  };
+};
+
+export default connect(mapStateToProps)(IncomeList);

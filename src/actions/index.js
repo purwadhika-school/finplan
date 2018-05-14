@@ -90,9 +90,31 @@ const doAddIncome = async (selectedBtn, label, amount, paydate, from) => {
   return axios
     .post(url, data)
     .then(res => {
+      console.log(res)
       return res.data;
     })
     .catch(err => {
       console.log(err);
     });
 };
+
+export const GET_INCOME = 'GET_INCOME'
+export const getIncomeList = () => {
+  return {
+    type: GET_INCOME,
+    payload: doFetchIncome()
+  }
+}
+
+const doFetchIncome = async () => {
+  const token = await getUniversalKeys("token:user");
+  const url = `http://172.104.50.9:3000/api/incomes?access_token=${token}`;
+  return axios.get(url)
+    .then(res => {
+      console.log(res)
+      return res.data
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
