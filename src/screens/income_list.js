@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {
   View,
+  ScrollView,
   FlatList,
   Text,
   TouchableOpacity,
@@ -11,10 +12,6 @@ import { connect } from "react-redux";
 import { getIncomeList } from "../actions";
 
 class IncomeList extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.dispatch(getIncomeList());
   }
@@ -68,7 +65,7 @@ class IncomeList extends Component {
 
   render() {
     return (
-      <View style={{ backgroundColor: "#F1F1F1", flex: 1 }}>
+      <ScrollView style={{ backgroundColor: "#F1F1F1", flex: 1 }}>
         <View style={{ marginTop: 15 }}>
           {this.props.incomeList.length === 0 && (
             <ActivityIndicator size="large" />
@@ -90,22 +87,22 @@ class IncomeList extends Component {
               backgroundColor: "#77dd77",
               borderWidth: 1,
               marginRight: 5,
-              marginTop: 10
+              marginTop: 10,
+              marginBottom: 35
             }}
           >
             <Text
               style={{
                 textAlign: "center",
                 fontSize: 20,
-                marginTop: 10,
-                marginBottom: 35
+                margin: 10,
               }}
             >
               Add Income
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
