@@ -76,7 +76,7 @@ export const signinData = (
 export const incomeAddData = (
   state = {
     isFetching: false,
-    data: {},
+    data: [],
     status: ""
   },
   action
@@ -93,7 +93,7 @@ export const incomeAddData = (
       return {
         ...state,
         isFetching: false,
-        data: action.payload,
+        data: [...data, action.payload],
         status: "ok"
       };
 
@@ -104,20 +104,7 @@ export const incomeAddData = (
         status: "error"
       };
 
-    default:
-      return state;
-  }
-};
 
-export const incomeData = (
-  state = {
-    isFetching: false,
-    data: [],
-    status: ""
-  },
-  action
-) => {
-  switch (action.type) {
     case `${GET_INCOME}_PENDING`:
       return {
         ...state,
@@ -144,6 +131,42 @@ export const incomeData = (
       return state;
   }
 };
+
+// export const incomeData = (
+//   state = {
+//     isFetching: false,
+//     data: [],
+//     status: ""
+//   },
+//   action
+// ) => {
+//   switch (action.type) {
+//     case `${GET_INCOME}_PENDING`:
+//       return {
+//         ...state,
+//         isFetching: true,
+//         status: "processing"
+//       };
+
+//     case `${GET_INCOME}_FULFILLED`:
+//       return {
+//         ...state,
+//         isFetching: false,
+//         data: action.payload,
+//         status: "ok"
+//       };
+
+//     case `${GET_INCOME}_REJECTED`:
+//       return {
+//         ...state,
+//         isFetching: false,
+//         status: "error"
+//       };
+
+//     default:
+//       return state;
+//   }
+// };
 
 const rootReducer = combineReducers({
   signupData,
