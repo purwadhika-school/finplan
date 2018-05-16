@@ -179,3 +179,11 @@ export const calculateSaldo = () => {
     payload: doFetchIncome()
   }
 }
+
+export const HITUNG_TOTAL_EXPENSE = 'HITUNG_TOTAL_EXPENSE'
+export const calculateExpense = () => {
+  return {
+    type: HITUNG_TOTAL_EXPENSE,
+    payload: doGetExpense()
+  }
+}

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
-import { doLogout, calculateSaldo } from "../actions";
+import { doLogout, calculateSaldo, calculateExpense } from "../actions";
 import moment from "moment";
 
 const datetime = moment().format("MMMM Do YYYY, h:mm:ss a");
@@ -9,6 +9,7 @@ const datetime = moment().format("MMMM Do YYYY, h:mm:ss a");
 class Home extends Component {
   componentDidMount() {
     this.props.dispatch(calculateSaldo());
+    this.props.dispatch(calculateExpense());
   }
 
   render() {
@@ -47,8 +48,16 @@ class Home extends Component {
                 width: "50%"
               }}
             />
-            <Text style={{ fontSize: 45 }}>IDR 1,200,000</Text>
-            <Text style={{ fontSize: 19 }}>Sabtu, 9 January 2018, 20:00</Text>
+            {this.props.totalSaldo.isFetching ? (
+              <ActivityIndicator size="small" />
+            ) : (
+              <View>
+                <Text style={{ fontSize: 45 }}>
+                  IDR {this.props.totalExpense.totalNominalExpense}
+                </Text>
+                <Text style={{ fontSize: 19 }}>{datetime}</Text>
+              </View>
+            )}
           </View>
         </View>
         <View
@@ -118,7 +127,8 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   return {
-    totalSaldo: state.totalSaldo
+    totalSaldo: state.totalSaldo,
+    totalExpense: state.totalExpense
   };
 };
 
