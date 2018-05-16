@@ -1,6 +1,12 @@
 import { combineReducers } from "redux";
 import { PENDING, FULFILLED, REJECTED } from "redux-promise-middleware";
-import { SIGNUP, LOGIN, ADD_INCOME, GET_INCOME } from "../actions/index";
+import {
+  SIGNUP,
+  LOGIN,
+  ADD_INCOME,
+  GET_INCOME,
+  ADD_EXPENSE
+} from "../actions/index";
 
 export const signupData = (
   state = {
@@ -145,11 +151,47 @@ export const incomeData = (
   }
 };
 
+export const addExpenseData = (
+  state = {
+    isFetching: false,
+    data: {},
+    status: ""
+  },
+  action
+) => {
+  switch (action.type) {
+    case `${ADD_EXPENSE}_PENDING`:
+      return {
+        ...state,
+        isFetching: true,
+        status: "processing"
+      };
+    case `${ADD_EXPENSE}_FULFILLED`:
+      return {
+        ...state,
+        isFetching: false,
+        status: "ok",
+        data: action.payload
+      };
+
+    case `${ADD_EXPENSE}_REJECTED`:
+      return {
+        ...state,
+        isFetching: false,
+        status: "failed"
+      };
+
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
   signupData,
   signinData,
   incomeAddData,
-  incomeData
+  incomeData,
+  addExpenseData
 });
 
 export default rootReducer;

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, Alert, TextInput } from "react-native";
 import numeral from "numeral";
+import { connect } from "react-redux";
+import { addExpense } from "../actions";
 
 class ExpenseAdd extends Component {
   constructor(props) {
@@ -8,8 +10,33 @@ class ExpenseAdd extends Component {
 
     this.state = {
       selectedBtn: "",
-      amountFormatted: "0"
+      amountFormatted: "0",
+      amount: "0",
+      label: ""
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
+      if (nextProps.addExpenseData.status === "ok") {
+        this.props.navigation.goBack();
+      }
+    }
+  }
+
+  saveHandler() {
+    const { amount, label, selectedBtn } = this.state;
+    console.log(amount, label, selectedBtn);
+    if (amount === "" || label === "" || selectedBtn === "") {
+      Alert.alert("Warning!", "Field can not be empty!");
+    } else {
+      const data = {
+        type: selectedBtn,
+        label: label,
+        amount: amount
+      };
+      this.props.dispatch(addExpense(data));
+    }
   }
 
   render() {
@@ -46,7 +73,8 @@ class ExpenseAdd extends Component {
           <TouchableOpacity
             onPress={() => this.setState({ selectedBtn: "unexpected" })}
             style={{
-              backgroundColor: selectedBtn === "unexpected" ? "#77dd77" : "#F1F1F1",
+              backgroundColor:
+                selectedBtn === "unexpected" ? "#77dd77" : "#F1F1F1",
               width: "20%",
               borderRadius: 10,
               marginLeft: 15
@@ -78,6 +106,7 @@ class ExpenseAdd extends Component {
           }}
         >
           <TextInput
+            onChangeText={txt => this.setState({ label: txt })}
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, width: "70%", marginLeft: 20 }}
             placeholder="Label"
@@ -93,12 +122,9 @@ class ExpenseAdd extends Component {
           }}
         >
           <TextInput
-            onSubmitEditing={event => console.log(event.nativeEvent.text)
-            //   this.setState({
-            //     amountFormatted: numeral(event.nativeEvent.text).format("0,0")
-            //   })
-            }
-            // value={this.state.amountFormatted}
+            onChangeText={text => {
+              this.setState({ amount: text });
+            }}
             keyboardType="numeric"
             underlineColorAndroid="rgba(0,0,0,0)"
             style={{ fontSize: 20, width: "70%", marginLeft: 20 }}
@@ -107,6 +133,7 @@ class ExpenseAdd extends Component {
         </View>
         <View style={{ marginLeft: 20, marginTop: 20, flexDirection: "row" }}>
           <TouchableOpacity
+            onPress={() => this.props.navigation.goback()}
             style={{
               width: "30%",
               borderColor: "#F1F1F1",
@@ -129,6 +156,9 @@ class ExpenseAdd extends Component {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => {
+              this.saveHandler();
+            }}
             style={{
               width: "30%",
               borderColor: "#F1F1F1",
@@ -156,4 +186,10 @@ class ExpenseAdd extends Component {
   }
 }
 
-export default ExpenseAdd
+const mapStateToProps = state => {
+  return {
+    addExpenseData: state.addExpenseData
+  };
+};
+
+export default connect(mapStateToProps)(ExpenseAdd);

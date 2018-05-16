@@ -90,7 +90,7 @@ const doAddIncome = async (selectedBtn, label, amount, paydate, from) => {
   return axios
     .post(url, data)
     .then(res => {
-      console.log(res)
+      console.log(res);
       return res.data;
     })
     .catch(err => {
@@ -98,23 +98,53 @@ const doAddIncome = async (selectedBtn, label, amount, paydate, from) => {
     });
 };
 
-export const GET_INCOME = 'GET_INCOME'
+export const GET_INCOME = "GET_INCOME";
 export const getIncomeList = () => {
   return {
     type: GET_INCOME,
     payload: doFetchIncome()
-  }
-}
+  };
+};
 
 const doFetchIncome = async () => {
   const token = await getUniversalKeys("token:user");
   const url = `http://172.104.50.9:3000/api/incomes?access_token=${token}`;
-  return axios.get(url)
+  return axios
+    .get(url)
     .then(res => {
-      console.log(res)
-      return res.data
+      return res.data;
     })
     .catch(err => {
-      console.log(err)
+      console.log(err);
+    });
+};
+
+export const ADD_EXPENSE = "ADD_EXPENSE";
+export const addExpense = data => {
+  return {
+    type: ADD_EXPENSE,
+    payload: doAddExpense(data)
+  };
+};
+
+doAddExpense = async data => {
+  const uid = await getUniversalKeys("uid:@#$%");
+  const token = await getUniversalKeys("token:user");
+  const payload = {
+    type: data.type,
+    label: data.label,
+    amount: data.amount,
+    uid: uid
+  };
+  const url = `http://172.104.50.9:3000/api/expenses?access_token=${token}`;
+
+  return axios
+    .post(url, payload)
+    .then(res => {
+      console.log(res);
+      return res.data;
     })
-}
+    .catch(err => {
+      console.log(err);
+    });
+};
