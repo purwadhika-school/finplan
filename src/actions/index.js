@@ -171,3 +171,11 @@ const doGetExpense = async () => {
       console.log(err);
     });
 };
+
+export const HITUNG_TOTAL_SALDO = 'HITUNG_TOTAL_SALDO'
+export const calculateSaldo = () => {
+  return {
+    type: HITUNG_TOTAL_SALDO,
+    payload: doFetchIncome()
+  }
+}

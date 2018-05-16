@@ -6,8 +6,10 @@ import {
   ADD_INCOME,
   GET_INCOME,
   ADD_EXPENSE,
-  GET_EXPENSE
+  GET_EXPENSE,
+  HITUNG_TOTAL_SALDO
 } from "../actions/index";
+import numeral from "numeral";
 
 export const signupData = (
   state = {
@@ -210,11 +212,53 @@ export const expenseData = (
         data: action.payload,
         status: "ok"
       };
+
     case `${GET_EXPENSE}_REJECTED`:
       return {
         ...state,
         isFetching: false,
         status: "failed"
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const totalSaldo = (
+  state = {
+    isFetching: false,
+    totalNominalSaldo: 0,
+    status: ""
+  },
+  action
+) => {
+  switch (action.type) {
+    case `${HITUNG_TOTAL_SALDO}_PENDING`:
+      return {
+        ...state,
+        isFetching: true,
+        status: "processing"
+      };
+    case `${HITUNG_TOTAL_SALDO}_FULFILLED`:
+      console.log(action.payload);
+      let total_saldo = 0;
+      const amounts = action.payload;
+      amounts.map(data => {
+        const nominal = parseInt(data.amount);
+        total_saldo += nominal;
+      });
+      console.log(total_saldo);
+
+      return {
+        ...state,
+        isFetching: false,
+        totalNominalSaldo: numeral(total_saldo).format("0,0")
+      };
+    case `${HITUNG_TOTAL_SALDO}_REJECTED`:
+      return {
+        ...state,
+        isFetching: false
       };
 
     default:
@@ -228,7 +272,8 @@ const rootReducer = combineReducers({
   incomeAddData,
   incomeData,
   addExpenseData,
-  expenseData
+  expenseData,
+  totalSaldo
 });
 
 export default rootReducer;

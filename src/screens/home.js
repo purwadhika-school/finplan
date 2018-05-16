@@ -1,9 +1,16 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
-import { doLogout } from "../actions";
+import { doLogout, calculateSaldo } from "../actions";
+import moment from "moment";
+
+const datetime = moment().format("MMMM Do YYYY, h:mm:ss a");
 
 class Home extends Component {
+  componentDidMount() {
+    this.props.dispatch(calculateSaldo());
+  }
+
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -19,8 +26,16 @@ class Home extends Component {
                 width: "50%"
               }}
             />
-            <Text style={{ fontSize: 45 }}>IDR 5,000,000</Text>
-            <Text style={{ fontSize: 19 }}>Sabtu, 9 January 2018, 20:00</Text>
+            {this.props.totalSaldo.isFetching ? (
+              <ActivityIndicator size="small" />
+            ) : (
+              <View>
+                <Text style={{ fontSize: 45 }}>
+                  IDR {this.props.totalSaldo.totalNominalSaldo}
+                </Text>
+                <Text style={{ fontSize: 19 }}>{datetime}</Text>
+              </View>
+            )}
           </View>
 
           <View style={{ marginTop: 40 }}>
@@ -79,8 +94,8 @@ class Home extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              this.props.dispatch(doLogout())
-              this.props.navigation.goBack()
+              this.props.dispatch(doLogout());
+              this.props.navigation.goBack();
             }}
             style={{
               width: "40%",
@@ -101,4 +116,10 @@ class Home extends Component {
   }
 }
 
-export default connect()(Home);
+const mapStateToProps = state => {
+  return {
+    totalSaldo: state.totalSaldo
+  };
+};
+
+export default connect(mapStateToProps)(Home);
