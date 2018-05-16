@@ -1,25 +1,22 @@
 import React, { Component } from "react";
-import { View, FlatList, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  FlatList,
+  Text,
+  ActivityIndicator,
+  TouchableOpacity
+} from "react-native";
 import numeral from "numeral";
+import { connect } from "react-redux";
+import { getExpense } from "../actions";
 
 class ExpenseList extends Component {
   constructor(props) {
     super(props);
+  }
 
-    this.state = {
-      income_data: [
-        {
-          type: "Regular",
-          label: "Uang makan",
-          amount: "2000000"
-        },
-        {
-          type: "Unexpected",
-          label: "Uang jajan",
-          amount: "500000"
-        }
-      ]
-    };
+  componentDidMount() {
+    this.props.dispatch(getExpense());
   }
 
   renderBody(item_saya) {
@@ -74,11 +71,15 @@ class ExpenseList extends Component {
     return (
       <View style={{ backgroundColor: "#F1F1F1", flex: 1 }}>
         <View style={{ marginTop: 15 }}>
-          <FlatList
-            data={this.state.income_data}
-            keyExtractor={(data, index) => index}
-            renderItem={this.renderBody}
-          />
+          {this.props.expenseData.length > 0 ? (
+            <FlatList
+              data={this.props.expenseData}
+              keyExtractor={(data, index) => index}
+              renderItem={this.renderBody}
+            />
+          ) : (
+            <ActivityIndicator size="large" />
+          )}
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("ExpenseAddPage")}
             style={{
@@ -101,4 +102,11 @@ class ExpenseList extends Component {
     );
   }
 }
-export default ExpenseList;
+
+const mapStateToProps = state => {
+  return {
+    expenseData: state.expenseData.data
+  };
+};
+
+export default connect(mapStateToProps)(ExpenseList);

@@ -148,3 +148,26 @@ doAddExpense = async data => {
       console.log(err);
     });
 };
+
+export const GET_EXPENSE = "GET_EXPENSE";
+export const getExpense = () => {
+  return {
+    type: GET_EXPENSE,
+    payload: doGetExpense()
+  };
+};
+
+const doGetExpense = async () => {
+  const token = await getUniversalKeys("token:user");
+  const url = `http://172.104.50.9:3000/api/expenses?access_token=${token}`;
+
+  return axios
+    .get(url)
+    .then(res => {
+      console.log(res);
+      return res.data;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};

@@ -5,7 +5,8 @@ import {
   LOGIN,
   ADD_INCOME,
   GET_INCOME,
-  ADD_EXPENSE
+  ADD_EXPENSE,
+  GET_EXPENSE
 } from "../actions/index";
 
 export const signupData = (
@@ -186,12 +187,48 @@ export const addExpenseData = (
   }
 };
 
+export const expenseData = (
+  state = {
+    isFetching: false,
+    data: {},
+    status: ""
+  },
+  action
+) => {
+  switch (action.type) {
+    case `${GET_EXPENSE}_PENDING`:
+      return {
+        ...state,
+        isFetching: true,
+        status: "processing"
+      };
+    case `${GET_EXPENSE}_FULFILLED`:
+      console.log(action.payload);
+      return {
+        ...state,
+        isFetching: false,
+        data: action.payload,
+        status: "ok"
+      };
+    case `${GET_EXPENSE}_REJECTED`:
+      return {
+        ...state,
+        isFetching: false,
+        status: "failed"
+      };
+
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
   signupData,
   signinData,
   incomeAddData,
   incomeData,
-  addExpenseData
+  addExpenseData,
+  expenseData
 });
 
 export default rootReducer;
