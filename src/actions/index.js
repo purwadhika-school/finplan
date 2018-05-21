@@ -175,13 +175,20 @@ export const getExpense = () => {
 
 const doGetExpense = async () => {
   const token = await getUniversalKeys("token:user");
+  const uid = await getUniversalKeys("uid:@#$%");
   const url = `http://172.104.50.9:3000/api/expenses?access_token=${token}`;
 
   return axios
     .get(url)
     .then(res => {
       console.log(res);
-      return res.data;
+      let dataExpenses = []
+      res.data.map((data, idx) => {
+        if (data.uid === uid){
+          dataExpenses.push(data)
+        }
+      })
+      return dataExpenses
     })
     .catch(err => {
       console.log(err);
