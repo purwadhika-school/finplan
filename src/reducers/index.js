@@ -122,8 +122,8 @@ export const incomeData = (
       };
 
     case `${ADD_INCOME}_FULFILLED`:
-      const datas = [...state.data, action.payload]
-      console.log(datas)
+      const datas = [...state.data, action.payload];
+      console.log(datas);
       return {
         ...state,
         isFetching: false,
@@ -143,45 +143,11 @@ export const incomeData = (
   }
 };
 
-export const addExpenseData = (
-  state = {
-    isFetching: false,
-    data: {},
-    status: ""
-  },
-  action
-) => {
-  switch (action.type) {
-    case `${ADD_EXPENSE}_PENDING`:
-      return {
-        ...state,
-        isFetching: true,
-        status: "processing"
-      };
-    case `${ADD_EXPENSE}_FULFILLED`:
-      return {
-        ...state,
-        isFetching: false,
-        status: "ok",
-        data: action.payload
-      };
-
-    case `${ADD_EXPENSE}_REJECTED`:
-      return {
-        ...state,
-        isFetching: false,
-        status: "failed"
-      };
-
-    default:
-      return state;
-  }
-};
 
 export const expenseData = (
   state = {
     isFetching: false,
-    data: {},
+    data: [],
     status: ""
   },
   action
@@ -203,6 +169,28 @@ export const expenseData = (
       };
 
     case `${GET_EXPENSE}_REJECTED`:
+      return {
+        ...state,
+        isFetching: false,
+        status: "failed"
+      };
+
+    case `${ADD_EXPENSE}_PENDING`:
+      return {
+        ...state,
+        isFetching: true,
+        status: "processing"
+      };
+    case `${ADD_EXPENSE}_FULFILLED`:
+      const data_expense = [...state.data, action.payload]
+      return {
+        ...state,
+        isFetching: false,
+        status: "ok",
+        data: data_expense
+      };
+
+    case `${ADD_EXPENSE}_REJECTED`:
       return {
         ...state,
         isFetching: false,
@@ -300,7 +288,6 @@ const rootReducer = combineReducers({
   signupData,
   signinData,
   incomeData,
-  addExpenseData,
   expenseData,
   totalSaldo,
   totalExpense

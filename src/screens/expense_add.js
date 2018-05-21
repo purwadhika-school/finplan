@@ -188,7 +188,7 @@ class ExpenseAdd extends Component {
 
 const mapStateToProps = state => {
   return {
-    addExpenseData: state.addExpenseData
+    addExpenseData: state.expenseData
   };
 };
 
