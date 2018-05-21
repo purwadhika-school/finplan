@@ -64,7 +64,16 @@ export const doLogout = () => {
 };
 
 const logout = async () => {
+  const token = await getUniversalKeys("token:user");
   await removeUniversalKeys("token:user");
+  const url = `http://172.104.50.9:3000/api/Users/logout?access_token=${token}`
+  return axios.post(url)
+    .then(res => {
+      console.log(res)
+    })
+    .catch(err => {
+      console.log(err)
+    })
 };
 
 export const ADD_INCOME = "ADD_INCOME";

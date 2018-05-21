@@ -218,7 +218,7 @@ class IncomeAdd extends Component {
 
 const mapStateToProps = state => {
   return {
-    data_income: state.incomeAddData
+    data_income: state.incomeData
   };
 };
 
