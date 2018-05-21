@@ -117,11 +117,18 @@ export const getIncomeList = () => {
 
 const doFetchIncome = async () => {
   const token = await getUniversalKeys("token:user");
+  const uid = await getUniversalKeys("uid:@#$%");
   const url = `http://172.104.50.9:3000/api/incomes?access_token=${token}`;
   return axios
     .get(url)
     .then(res => {
-      return res.data;
+      let dataIncomes = []
+      res.data.map((data, idx) => {
+        if (data.user_id === uid){
+          dataIncomes.push(data)
+        }
+      })
+      return dataIncomes
     })
     .catch(err => {
       console.log(err);
